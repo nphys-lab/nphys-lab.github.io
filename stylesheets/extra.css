@@ -1,0 +1,647 @@
+/* ---------------------------------------------------------------------------
+   Custom styles carried over from the original hand-written site.css.
+   Only the pieces Material does not already provide are kept here:
+   the hero banner, card grids, news list, pills, placeholders and member grid.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --nphys-accent: #1f6f78;
+  --nphys-accent2: #0e4f58;
+  --nphys-ok: #27764b;
+  --nphys-warn: #9a6514;
+  --nphys-bad: #9a3340;
+}
+
+/* Material's teal primary, nudged to the original palette */
+[data-md-color-primary="teal"] {
+  --md-primary-fg-color: var(--nphys-accent2);
+  --md-primary-fg-color--light: var(--nphys-accent);
+  --md-primary-fg-color--dark: #093a41;
+}
+body:not([data-md-color-scheme="slate"])[data-md-color-accent="teal"] {
+  --md-accent-fg-color: var(--nphys-accent);      /* #1f6f78 — 5.83:1 on white */
+}
+/* Slate shipped three unrelated teals: Material's stock mint for links,
+   #1f6f78 for every hover/focus (2.76:1 — an AA failure on a sticky state) and
+   the header's #0e4f58 as the primary button fill (1.75:1, darker than the card
+   behind it). These reuse the two values already in the dark hero. */
+body[data-md-color-scheme="slate"][data-md-color-accent="teal"] {
+  --md-accent-fg-color: #8ad5db;
+  --md-accent-bg-color: #0b2a2f;
+}
+body[data-md-color-scheme="slate"][data-md-color-primary="teal"] {
+  --md-typeset-a-color: #79c7cf;
+}
+body[data-md-color-scheme="slate"] .md-typeset .md-button--primary {
+  background-color: #79c7cf;
+  border-color: #79c7cf;
+  color: #0b2a2f;
+}
+
+/* --------------------------------------------------------------- hero banner */
+/* Sizes are tuned against Material's type scale, where 1rem = 20px and body
+   text is 0.8rem (16px). The headline tops out at ~2.3rem (46px), a little
+   under 3x body text -- large enough to lead the page without the oversized
+   look of the original hand-written stylesheet, whose clamp reached 68px. */
+.md-typeset .hero {
+  /* The bleed and the inner padding must match, or hero copy lands inboard of
+     the content grid: everything below (headings, news dates, buttons) sits on
+     the gutter and the hero text was 16px right of it. */
+  margin: 0 -0.8rem 2.6rem;
+  padding: 2.8rem 1.6rem 2.6rem;
+  text-align: center;
+  background: linear-gradient(135deg, #eef6f6, #f8fafb 55%, #eef3f5);
+  /* All four corners: the panel does not reach the header, so the old
+     `0 0 12px 12px` read as two clipped corners rather than a flush banner. */
+  border-radius: 12px;
+}
+body[data-md-color-scheme="slate"] .md-typeset .hero {
+  background: linear-gradient(135deg, #16313a, #1a2228 55%, #16303a);
+}
+.md-typeset .hero .eyebrow {
+  font-size: 0.72rem;
+  color: var(--md-primary-fg-color);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.md-typeset .hero h1 {
+  font-size: clamp(1.7rem, 3.6vw, 2.9rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+  margin: 0.3em 0 0.45em;
+  color: var(--md-default-fg-color);
+}
+.md-typeset .hero h1 .headerlink {
+  display: none;
+}
+/* The affiliation line is a long formal institution name; keep it clearly
+   subordinate to the headline and hold it to a readable measure. */
+.md-typeset .hero .jp {
+  margin-top: 1.1rem;
+  font-size: 0.72rem;
+  max-width: 34ch;
+  line-height: 1.6;
+  color: var(--md-default-fg-color--light);
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+.md-typeset .hero .hero-sub {
+  font-size: clamp(0.95rem, 1.9vw, 1.35rem);
+  line-height: 1.35;
+  color: var(--md-default-fg-color);
+  font-weight: 400;
+  margin-top: 0.5rem;
+}
+.md-typeset .hero .tagline {
+  font-size: clamp(0.95rem, 1.75vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--md-primary-fg-color);
+  font-weight: 600;
+  margin-top: 1.1rem;
+  max-width: 50ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --md-primary-fg-color is pinned to a dark teal in BOTH schemes because it is
+   also the header background. Used as a foreground on the slate hero it measured
+   1.73:1 — unreadable. These lift only the foreground uses. */
+body[data-md-color-scheme="slate"] .md-typeset .hero .eyebrow {
+  color: #79c7cf;
+}
+body[data-md-color-scheme="slate"] .md-typeset .hero .tagline {
+  color: #8ad5db;
+}
+body[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary) {
+  color: var(--md-typeset-a-color);
+  border-color: var(--md-typeset-a-color);
+}
+
+/* ------------------------------------------------------- heading rhythm */
+/* Slightly tighter than the documentation defaults, which are set for long
+   technical pages rather than a handful of short site pages. */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  letter-spacing: -0.008em;
+}
+/* Material renders the page h1 in a light grey at weight 300, which suits long
+   documentation but leaves it looking weaker than the bold h2 beneath it. On a
+   website the page title should lead. (.md-typeset .hero h1 is more specific,
+   so the home-page headline keeps its own size.) */
+.md-typeset h1 {
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+  font-size: 1.9rem;
+  line-height: 1.2;
+  margin-bottom: 0.9em;
+}
+.md-typeset h2 {
+  font-size: 1.35rem;
+  line-height: 1.3;
+  margin-top: 1.9em;
+  font-weight: 700;
+}
+.md-typeset h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+/* section headings inside the home-page cards should not shout */
+.md-typeset .grid.two h2 {
+  font-size: 1.15rem;
+  margin-top: 0;
+}
+
+/* -------------------------------------------------------------- generic grid */
+.md-typeset .grid.two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  /* stretch, not start: side-by-side cards on /contact/ ended at different
+     heights, which reads as a mistake on a two-card page */
+}
+.md-typeset .card {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  background: var(--md-default-bg-color);
+}
+.md-typeset .grid.two > section.card {
+  /* the home page pairs a long news list with a short card; <section class="card">
+     occurs only in the two index.md files, so /contact/ keeps its equal heights */
+  align-self: start;
+}
+.md-typeset .card > :first-child,
+.md-typeset .card > :first-child > :first-child {
+  margin-top: 0;
+}
+.md-typeset .soft {
+  background: var(--md-code-bg-color);
+}
+.md-typeset .muted {
+  color: var(--md-default-fg-color--light);
+  font-weight: 400;
+}
+.md-typeset .lede {
+  font-size: 1.05em;
+  /* was --light, which rendered the lead sentence fainter than the secondary
+     paragraph under it and measured 4.35:1 */
+  color: var(--md-default-fg-color);
+}
+.md-typeset .tiny {
+  font-size: 0.72rem;
+}
+.md-typeset .mono {
+  font-family: var(--md-code-font-family, ui-monospace, SFMono-Regular, Menlo, monospace);
+  overflow-wrap: anywhere;
+}
+
+/* ----------------------------------------------------------------- news list */
+.md-typeset ul.news {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.md-typeset ul.news li {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.6rem;
+  padding: 0.6rem 0;
+  margin: 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+.md-typeset ul.news time {
+  color: var(--md-default-fg-color--light);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------- pills */
+.md-typeset .pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.md-typeset .pill.full { background: #e4f4ea; color: var(--nphys-ok); }
+.md-typeset .pill.partial { background: #fff3dc; color: var(--nphys-warn); }
+.md-typeset .pill.indexonly { background: #f8e4e8; color: var(--nphys-bad); }
+
+/* -------------------------------------------------- image placeholder blocks */
+.md-typeset .placeholder {
+  border: 1px dashed var(--md-default-fg-color--lighter);
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color--light);
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.72rem;
+  margin: 1rem 0;
+}
+/* Two members have no photo. An empty dashed circle reads as a failed image, so
+   use the same gradient disc as docs/assets/avatar.svg, which already ships. */
+.md-typeset .placeholder.avatar {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #1f6f78, #0e4f58);
+}
+.md-typeset .placeholder.avatar::before {
+  content: attr(data-initials);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+/* The filename inside the disc re-raised its own font-size via .tiny and was
+   force-broken by .mono{overflow-wrap:anywhere}, spilling outside the card at
+   390px and 820px. It stays in the Markdown source and in
+   recovery/asset_manifest.csv; it just should not be rendered in a 105px circle. */
+.md-typeset .placeholder.avatar .tiny.mono {
+  display: none;
+}
+
+/* ------------------------------------------------------------- member layout */
+.md-typeset .card.person {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+.md-typeset .card.person strong {
+  display: block;
+}
+.md-typeset .member-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  column-gap: 1.2rem;   /* match .grid.two so the central seam runs straight */
+}
+.md-typeset .member-item {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 10px;
+  font-size: 0.78rem;
+}
+.md-typeset .member-item strong {
+  display: block;
+}
+
+/* ------------------------------------------------------------ publications  */
+/* Citations wrap to 3-4 lines inside the 38rem measure, so 12px stopped
+   reading as a break between papers. */
+.md-typeset ol > li {
+  margin-bottom: 1rem;
+}
+
+/* --------------------------------------------------- one measure for body text */
+/* With navigation.tabs and the hidden nav sidebar, .md-content__inner is the full
+   1188px at 1440, so prose ran ~150 Latin / ~73 CJK characters per line while the
+   page's own figure was capped at 760px. Cap only DIRECT text children: the card
+   grids, member list, logo row and news list are never direct children of
+   .md-typeset, so they keep the full column and the shared left edge survives. */
+.md-typeset > p,
+.md-typeset > ul,
+.md-typeset > ol,
+.md-typeset > dl,
+.md-typeset > blockquote {
+  max-width: 38rem;
+}
+/* 38rem == the 760px figure cap, so text and figure share one left edge */
+.md-typeset figure.figure {
+  text-align: left;
+}
+.md-typeset figure.figure img {
+  margin-left: 0;
+  margin-right: auto;
+}
+/* 1.6 is calibrated for Latin; kanji fill the em box and need more air */
+html[lang="ja"] .md-typeset p,
+html[lang="ja"] .md-typeset ul:not(.news) li,
+html[lang="ja"] .md-typeset ol li {
+  line-height: 1.8;
+}
+
+/* ------------------------------------------------------------------ mobile  */
+/* A 1024px laptop or landscape tablet used to get the phone stack: /member/
+   became a 2800px ladder of full-width cards holding a 90px photo and one name.
+   Keep two columns down to the real phone breakpoint and just add page gutters. */
+@media screen and (max-width: 76.1875em) {
+  .md-content__inner {
+    margin-inline: 2rem;
+  }
+  .md-typeset .hero {
+    margin-inline: 0;
+  }
+  /* give the wordmark more of the split once the hero narrows */
+  .md-typeset .hero-inner {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+  /* The headline's hard <br> is tuned for the wide hero. Once the text column
+     narrows, that break plus natural wrapping strands a single character on its
+     own line ("...支え / る"), so let Japanese wrap by itself here.
+     JAPANESE ONLY: hiding the <br> in English would join the words either side
+     of it into "mechanismsof". */
+  html[lang="ja"] .md-typeset .hero .hero-sub br {
+    display: none;
+  }
+  .md-typeset .card.person {
+    grid-template-columns: 90px 1fr;
+  }
+  /* the column narrows to 90px while the image kept height:105px, so Material's
+     img{max-width:100%} squashed the photos into vertical ellipses */
+  .md-typeset .card.person img.avatar,
+  .md-typeset .placeholder.avatar {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* real phones: now the single column is genuinely needed */
+@media screen and (max-width: 47.9375em) {
+  .md-typeset .grid.two,
+  .md-typeset .member-list {
+    grid-template-columns: 1fr;
+  }
+  .md-typeset ul.news li {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+  .md-content__inner {
+    margin-inline: 1rem;
+  }
+  /* 19px link text inside a 78px row was a poor tap target */
+  .md-typeset ul.news li a {
+    display: inline-block;
+    padding: 0.35rem 0;
+  }
+}
+
+/* ------------------------------------------------------- real member photos */
+/* Markdown images inside a person card render wrapped in <p>; drop that gap
+   so the photo lines up with the 120px grid column. */
+/* the inner <div> implicitly closes the <p>, so a child combinator misses the
+   romanised name and it floated 41px below the Japanese name */
+.md-typeset .card.person p {
+  margin: 0;
+}
+.md-typeset .card.person img.avatar {
+  display: block;
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--md-code-bg-color);
+}
+
+/* ------------------------------------------------------------ page figures */
+.md-typeset figure.figure {
+  margin: 1.4rem 0;
+  text-align: center;
+}
+.md-typeset figure.figure img {
+  max-width: min(100%, 760px);
+  height: auto;
+  border-radius: 10px;
+}
+.md-typeset figure.figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* -------------------------------------------------------- funding logo row */
+.md-typeset .logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.6rem;
+  margin: 1rem 0;
+}
+.md-typeset .logo-row p {
+  margin: 0;
+}
+/* An SVG with only a viewBox has no intrinsic size. Given just `max-height` and
+   `width: auto` the box has no definite size in either axis and collapses to
+   0x0 -- which is exactly what happened when the KAKENHI raster was replaced by
+   a vector. Use a definite height. */
+.md-typeset img.logo {
+  height: 62px;
+  width: auto;
+  max-width: 100%;
+}
+
+/* The KAKENHI mark ships its own solid purple panel, so it needs no backplate
+   in either theme. If a funding logo with a transparent or white ground is added
+   later (BraiDyn-BC, 脳情報動態, Brain/MINDS), give it a class that restores one. */
+
+/* --------------------------------------------------------------- header logo */
+/* Wide Mt. Fuji line art in a single near-white (#eae9e9) on a transparent
+   ground, drawn for a dark bar. It needs no chip or ring -- adding one would put
+   a box around open line work. It is deliberately taller than a typical header
+   mark because the strokes are fine and the lockup is 2.27:1. */
+.md-header__button.md-logo {
+  padding: 0;
+  margin-right: 0.4rem;
+}
+.md-header__button.md-logo img {
+  height: 1.95rem;
+  width: auto;
+}
+/* the same logo appears in the mobile drawer header */
+.md-nav__title .md-nav__button.md-logo img {
+  height: 1.95rem;
+  width: auto;
+}
+@media screen and (max-width: 44.9375em) {
+  .md-header__button.md-logo img {
+    height: 1.7rem;
+  }
+}
+
+/* -------------------------------------------------------------- blog article */
+/* Material lays the post-metadata rail before the article, so every post title
+   started 250px inboard of every other page title on the site. Reversing the
+   flex row puts the article back on the shared left edge at x=126.
+   [dir=ltr] is required: Material's own [dir=ltr] rule outranks an unprefixed one. */
+@media screen and (min-width: 76.25em) {
+  .md-content--post {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  [dir="ltr"] .md-content--post .md-content__inner {
+    margin-left: 0.8rem;
+    margin-right: 1.2rem;
+  }
+}
+
+/* ----------------------------------------------------------------- hero logo */
+/* The lab's own mark sits beside the headline. The hero is centred, so the
+   logo and the text block are centred together as one group and stack on
+   phones, where a side-by-side pair would squeeze the headline. */
+.md-typeset .hero-inner {
+  /* two equal columns: the mark holds the left half, the wordmark the right */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.md-typeset img.hero-logo {
+  justify-self: center;
+  width: min(100%, clamp(210px, 31vw, 420px));
+  height: auto;
+  border-radius: 50%;
+}
+.md-typeset .hero-text {
+  text-align: center;
+  /* flex hygiene: min-width:auto would stop the text block shrinking below its
+     longest unbroken line if a future headline has no break opportunity */
+  min-width: 0;
+  max-width: 100%;
+}
+.md-typeset .hero-inner > * {
+  min-width: 0;
+}
+@media screen and (max-width: 47.9375em) {
+  .md-typeset .hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.2rem;
+  }
+  .md-typeset img.hero-logo {
+    width: 168px;
+  }
+  /* at ~310px of text column the clamp's lower bound still wrapped the Japanese
+     headline onto three lines with a single kana stranded on the last */
+  .md-typeset .hero h1 {
+    font-size: 1.5rem;
+  }
+  .md-typeset .hero .eyebrow {
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ------------------------------------------------------------------ map embed */
+/* Held to the same 38rem measure and left edge as body text and figures, so the
+   contact page keeps one column rather than the map running the full 1188px. */
+.md-typeset .map-embed {
+  position: relative;
+  /* leads the contact page above the full-width cards, so it matches their
+     width rather than the 38rem body measure; the height cap stops it becoming
+     a 740px slab at 1440 */
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 420px;
+  margin: 1.2rem 0;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--md-code-bg-color);
+}
+.md-typeset .map-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+@media screen and (max-width: 47.9375em) {
+  .md-typeset .map-embed {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ----------------------------------------------------------- figure panel row */
+/* Three movie stills sit above the merged research text. They are given explicit
+   width/height attributes in the markup so the row reserves its space before the
+   GIFs load, rather than shoving the text down as each one arrives. */
+.md-typeset .fig-panels {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+  align-items: start;
+  margin: 1.4rem 0 1.8rem;
+}
+.md-typeset figure.panel {
+  margin: 0;
+  text-align: center;
+}
+/* The three clips have different aspect ratios (260x224, 300x300, 368x248), so
+   a plain width:100% left the row ragged. A fixed media box with object-fit:
+   contain keeps every clip undistorted while the row stays even. */
+.md-typeset figure.panel img {
+  display: block;
+  width: 100%;
+  height: 230px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--md-code-bg-color);
+}
+.md-typeset figure.panel figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  color: var(--md-default-fg-color--light);
+  text-align: center;
+}
+@media screen and (max-width: 47.9375em) {
+  .md-typeset .fig-panels {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+}
+
+/* ------------------------------------------------------- About-card artwork */
+/* A decorative crop of the Purkinje micrograph at the head of the summary card.
+   Fixed 16:9 box so the card keeps a predictable height whatever the source. */
+.md-typeset .card.soft img.card-media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: 50% 55%;
+  border-radius: 8px;
+  margin: 0 0 1rem;
+}
+.md-typeset .card.soft p:has(> img.card-media) {
+  margin: 0 0 1rem;
+}
+
+/* --------------------------------------------------------- paper card thumbs */
+/* Journal figure previews at the head of each recent-paper card. The sources are
+   dense multi-panel figures, so they are cropped to a wide box rather than shown
+   whole -- at card width the full figure is unreadable either way, and a crop at
+   least reads as an image instead of a grey smear. */
+.md-typeset .grid.cards img.paper-thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: 50% 0%;
+  border-radius: 8px;
+  background: #fff;
+  margin: 0 0 0.7rem;
+  transition: transform 125ms, box-shadow 125ms;
+}
+.md-typeset .grid.cards a:hover img.paper-thumb {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+.md-typeset .grid.cards > ul > li > p:first-child {
+  margin-top: 0;
+}
