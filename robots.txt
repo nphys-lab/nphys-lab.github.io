@@ -1,12 +1,5 @@
-# TEMPORARY: this deployment is a preview hosted from a personal account and
-# must not be indexed. It would otherwise compete with the production site at
-# nphys-lab.yamanashi.ac.jp and create duplicate content.
-#
-# When the site moves to its production domain, replace the whole file with:
-#
-#   User-agent: *
-#   Allow: /
-#   Sitemap: https://nphys-lab.yamanashi.ac.jp/sitemap.xml
-
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://nphys-lab.yamanashi.ac.jp/sitemap.xml
+Sitemap: https://nphys-lab.yamanashi.ac.jp/en/sitemap.xml
