@@ -287,6 +287,32 @@ body[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primar
 .md-typeset .card.person strong {
   display: block;
 }
+
+/* Whole-card link: a member card containing a link (e.g. to ResearchGate)
+   becomes clickable everywhere. The <a> stays on the name, where the
+   authors hook expects it; its ::after pseudo-element stretches over the
+   card to catch clicks, and the card lifts slightly on hover as a cue. */
+.md-typeset .card.person {
+  position: relative;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.md-typeset .card.person a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+.md-typeset .card.person:has(a):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+.md-typeset .card.person a {
+  color: inherit;                /* the name reads as text, the card is the link */
+}
+.md-typeset .card.person:has(a):hover a {
+  color: var(--md-accent-fg-color);
+}
 .md-typeset .member-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
